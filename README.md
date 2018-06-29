@@ -30,3 +30,6 @@ Around	环绕通知, 在目标执行中执行通知, 控制目标执行时机
 AfterReturning	后置返回通知, 目标返回时执行通知
 
 AfterThrowing	异常通知, 目标抛出异常时执行通知
+
+
+Aspect的真正作用，它负责收集Jpoint，设置advice。一些简单的功能可在Aspect中来完成，而一些复杂的功能，则只是有Aspect来统一收集信息，并交给专业模块来处理。
