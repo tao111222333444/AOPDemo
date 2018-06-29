@@ -1,6 +1,9 @@
 package com.example.hugo.aopdemo;
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+    private static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +31,27 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
                 test();
+                checkPhoneState();
                 MyApp.setIsLogin(false);
             }
         });
+
+    }
+
+    /**
+     *为checkPhoneState使用SecurityCheckAnnotation注解，并指明调用该函数的人需要声明的权限
+     * */
+    @SecurityCheckAnnotation(declaredPermission = "android.permission.READ_PHONE_STATE")
+    private  void checkPhoneState(){
+        //如果不使用AOP，就得自己来检查权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission("android.permission.READ_PHONE_STATE") != PackageManager.PERMISSION_GRANTED){
+                Log.e(TAG,"have no permission to read phone state");
+                return;
+            }
+        }
+        Log.e(TAG,"Read Phone State succeed");
+
     }
 
     @CheckLogin

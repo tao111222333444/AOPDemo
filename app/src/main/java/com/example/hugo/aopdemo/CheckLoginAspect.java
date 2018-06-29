@@ -1,12 +1,15 @@
 package com.example.hugo.aopdemo;
 
 import android.content.Context;
+import android.support.v4.graphics.drawable.TintAwareDrawable;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
@@ -20,6 +23,12 @@ public class CheckLoginAspect {
     /**
      * 找到处理的切点
      * * *(..)  可以处理CheckLogin这个类的所有的方法
+     *
+     * @Pointcut：pointcut也变成了一个注解，这个注解是针对一个函数的，比如此处的executionCheckLogin()
+     * 其实它代表了这个pointcut的名字。如果是带参数的pointcut，则把参数类型和名字放到
+     * 代表pointcut名字的executionCheckLogin中，然后在@Pointcut注解中使用参数名。
+     * 基本和以前一样，只是写起来比较奇特一点。后面我们会介绍带参数的例子
+     *
      */
     @Pointcut("execution(@com.example.hugo.aopdemo.CheckLogin * *(..))")
     public void executionCheckLogin(){}
