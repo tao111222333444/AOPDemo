@@ -35,4 +35,62 @@ AfterThrowing	异常通知, 目标抛出异常时执行通知
 Aspect的真正作用，它负责收集Jpoint，设置advice。一些简单的功能可在Aspect中来完成，而一些复杂的功能，则只是有Aspect来统一收集信息，并交给专业模块来处理。
 
 
-参考文献 https://www.jianshu.com/p/9fb07b2596f7
+Join Point
+Join Point 表示连接点，即 AOP 可织入代码的点，下表列出了 AspectJ 的所有连接点：
+
+Join Point	说明
+Method call	方法被调用
+Method execution	方法执行
+Constructor call	构造函数被调用
+Constructor execution	构造函数执行
+Field get	读取属性
+Field set	写入属性
+Pre-initialization	与构造函数有关，很少用到
+Initialization	与构造函数有关，很少用到
+Static initialization	static 块初始化
+Handler	异常处理
+Advice execution	所有 Advice 执行
+Pointcuts
+Pointcuts 是具体的切入点，可以确定具体织入代码的地方，基本的 Pointcuts 是和 Join Point 相对应的。
+
+Join Point	Pointcuts syntax
+Method call	call(MethodPattern)
+Method execution	execution(MethodPattern)
+Constructor call	call(ConstructorPattern)
+Constructor execution	execution(ConstructorPattern)
+Field get	get(FieldPattern)
+Field set	set(FieldPattern)
+Pre-initialization	initialization(ConstructorPattern)
+Initialization	preinitialization(ConstructorPattern)
+Static initialization	staticinitialization(TypePattern)
+Handler	handler(TypePattern)
+Advice execution	adviceexcution()
+除了上面与 Join Point 对应的选择外，Pointcuts 还有其他选择方法：
+
+Pointcuts synatx	说明
+within(TypePattern)	符合 TypePattern 的代码中的 Join Point
+withincode(MethodPattern)	在某些方法中的 Join Point
+withincode(ConstructorPattern)	在某些构造函数中的 Join Point
+cflow(Pointcut)	Pointcut 选择出的切入点 P 的控制流中的所有 Join Point，包括 P 本身
+cflowbelow(Pointcut)	Pointcut 选择出的切入点 P 的控制流中的所有 Join Point，不包括 P 本身
+this(Type or Id)	Join Point 所属的 this 对象是否 instanceOf Type 或者 Id 的类型
+target(Type or Id)	Join Point 所在的对象（例如 call 或 execution 操作符应用的对象）是否 instanceOf Type 或者 Id 的类型
+args(Type or Id, ...)	方法或构造函数参数的类型
+if(BooleanExpression)	满足表达式的 Join Point，表达式只能使用静态属性、Pointcuts 或 Advice 暴露的参数、thisJoinPoint 对象
+Pointcut 表达式还可以 ！、&&、|| 来组合，!Pointcut 选取不符合 Pointcut 的 Join Point，Pointcut0 && Pointcut1 选取符合 Pointcut0 和 Pointcut1 的 Join Point，Pointcut0 || Pointcut1 选取符合 Pointcut0 或 Pointcut1 的 Join Point。
+
+上面 Pointcuts 的语法中涉及到一些 Pattern，下面是这些 Pattern 的规则，[]里的内容是可选的：
+
+Pattern	规则
+MethodPattern	[!] [@Annotation] [public,protected,private] [static] [final] 返回值类型 [类名.]方法名(参数类型列表) [throws 异常类型]
+ConstructorPattern	[!] [@Annotation] [public,protected,private] [final] [类名.]new(参数类型列表) [throws 异常类型]
+FieldPattern	[!] [@Annotation] [public,protected,private] [static] [final] 属性类型 [类名.]属性名
+TypePattern	其他 Pattern 涉及到的类型规则也是一样，可以使用 '!'、''、'..'、'+'，'!' 表示取反，'' 匹配除 . 外的所有字符串，'*' 单独使用事表示匹配任意类型，'..' 匹配任意字符串，'..' 单独使用时表示匹配任意长度任意类型，'+' 匹配其自身及子类，还有一个 '...'表示不定个数
+TypePattern 也可以使用 &&、|| 操作符，其他 Pointcut 更详细的语法说明，见官网文档 Pointcuts Language Semantics。
+
+
+
+
+参考文献 
+https://www.jianshu.com/p/9fb07b2596f7
+https://www.jianshu.com/p/691acc98c0b8
